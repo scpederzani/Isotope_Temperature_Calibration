@@ -30,11 +30,11 @@ dwcal_errors <- dwcal %>%
          yybar_by_xxbar = yybar*xxbar)
 
 
-#### calculated variables ####
+#### computed variables ####
 
 n <- length(dwcal$d18Ophos) # number of calibration data points
 
-a <- sum(dwcal_errors$yybar_by_xxbar)/sum(dwcal_errors$xxbar_sqr) # OLS slope
+a <- sum(dwcal_errors$yybar_by_xxbar)/sum(dwcal_errors$xxbar2) # OLS slope
 
 xbar <- mean(dwcal_errors$d18Odw) # mean of d18Odw (x)
 
@@ -44,13 +44,20 @@ b <- ybar - (a * xbar) # OLS intercept
 
 r2 <- sum(dwcal_errors$yybar_by_xxbar)^2/sum(dwcal_errors$xxbar2)/sum(dwcal_errors$yybar2) 
 
-
+sum_xxbar2 <- sum(dwcal_errors$xxbar2)
 
 #### more interim terms for OLS fit ####
 
 dwcal_errors <- dwcal_errors %>%
-  mutate(yaxb_sqr = (d18Ophos - (a * d18Odw) - b)^2)
+  mutate(yaxb2 = (d18Ophos - (a * d18Odw) - b)^2)
 
+#### more computed variables ####
+
+sigest <- sqrt(sum(dwcal_errors$yaxb2)/(n - 2))
+
+delta_a <- sigest/sqrt(sum_xxbar2)
+
+delta_bbar <- sum(sigest/sqrt(n))
 
 
 
