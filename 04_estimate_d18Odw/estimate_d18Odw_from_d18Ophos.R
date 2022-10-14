@@ -63,8 +63,22 @@ delta_bbar <- sum(sigest/sqrt(n)) # estimate of the uncertainty in the fit at x 
 
 error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwcal_errors$d18Odw), by = 1)) %>%
   mutate(y = a*(x - xbar) + ybar, 
-         dyfit = sigest * sqrt(1/n + (x - xbar)^2/sum_xxbar2), 
-         dytot = sigest * sqrt(1 + 1/n + (x - xbar)^2/sum_xxbar2))
+         dyfit = sigest * sqrt(1/n + (x - xbar)^2/sum_xxbar2), # 1 s.d. uncertainty on the OLS fit
+         dytot = sigest * sqrt(1 + 1/n + (x - xbar)^2/sum_xxbar2)) # estimation uncertainty of d18Odw from d18Ophos
+
+
+
+#### plot with error curves ####
+
+ggplot()+
+  theme_bw()+
+  geom_ribbon(data = error_curves, aes(x = x, ymin = y - dytot, ymax = y + dytot), color = NA, fill = "red", alpha = 0.3)+
+  geom_ribbon(data = error_curves, aes(x = x, ymin = y - dyfit, ymax = y + dyfit), color = NA, fill = "magenta", alpha = 0.3)+
+  geom_line(data = dwcal, aes(x = d18Odw, y = a * d18Odw + b), color = "black", lwd = 1)+
+  geom_point(data = dwcal, aes(x = d18Odw, y = d18Ophos), size = 3)+
+  xlim(-20, 5)+
+  ylim(0, 30)
+
 
 
 
