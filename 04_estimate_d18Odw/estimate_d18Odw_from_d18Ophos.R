@@ -79,6 +79,29 @@ ggplot()+
   xlim(-20, 5)+
   ylim(0, 30)
 
+#### calibrate example data ####
+
+
+z1_input <- read.csv("03_input_to_calibrate/equus_example_d18O_input.csv")
+
+z1_input
+
+# calibrate each d18Ophos point individually
+
+d18Odw_est_individual <- z1_input %>%
+  mutate(est_d18Odw_i = round(xbar + (d18Ophos - ybar)/a, 1), 
+         est_d18O_error_i = round((sigest/a)*sqrt(1 + 1/n + (d18Ophos - ybar)^2/sum_xxbar2), 1))
+
+# calculate mean d18Odw estimate (grouped by layer)
+
+z1_input %>%
+  add_count(layer, name = "m") %>%
+  group_by(site, taxon, layer, m) %>%
+  summarise(mean_d18Ophos = mean(d18Ophos, na.rm = TRUE)) %>%
+  mutate(est_d18Odw_group = round(xbar + (mean_d18Ophos - ybar)/a, 1), 
+         est_d18Odw_group_error = (sigest/a)*sqrt(1/m + 1/n + (mean_d18Ophos - ybar)^2/a^2/sum_xxbar2))
+
+
 
 
 
