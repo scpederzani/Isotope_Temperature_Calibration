@@ -51,13 +51,13 @@ sum_xxbar2 <- sum(dwcal_errors$xxbar2)
 dwcal_errors <- dwcal_errors %>%
   mutate(yaxb2 = (d18Ophos - (a * d18Odw) - b)^2)
 
-#### more computed variables ####
+#### calculate error terms ####
 
-sigest <- sqrt(sum(dwcal_errors$yaxb2)/(n - 2))
+sigest <- sqrt(sum(dwcal_errors$yaxb2)/(n - 2)) # estimate of the standard deviation of the natural variability in ε
 
-delta_a <- sigest/sqrt(sum_xxbar2)
+delta_a <- sigest/sqrt(sum_xxbar2) # estimate of the uncertainty of the slope
 
-delta_bbar <- sum(sigest/sqrt(n))
+delta_bbar <- sum(sigest/sqrt(n)) # estimate of the uncertainty in the fit at x = xbar
 
 
 
