@@ -36,9 +36,20 @@ n <- length(dwcal$d18Ophos) # number of calibration data points
 
 a <- sum(dwcal_errors$yybar_by_xxbar)/sum(dwcal_errors$xxbar_sqr) # OLS slope
 
-b <- mean(dwcal_errors$d18Ophos) - (a * mean(dwcal_errors$d18Odw)) # OLS intercept
+xbar <- mean(dwcal_errors$d18Odw) # mean of d18Odw (x)
+
+ybar <- mean(dwcal_errors$d18Ophos) # mean of d18Ophos (y)
+
+b <- ybar - (a * xbar) # OLS intercept
+
+r_sqr <- sum(dwcal_errors$yybar_by_xxbar)^2/sum(dwcal_errors$xxbar_sqr)/sum(dwcal_errors$yybar_sqr) 
 
 
+
+#### more interim terms for OLS fit ####
+
+dwcal_errors <- dwcal_errors %>%
+  mutate(yaxb_sqr = (d18Ophos - (a * d18Odw) - b)^2)
 
 
 
