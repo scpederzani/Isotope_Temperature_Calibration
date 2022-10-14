@@ -59,7 +59,12 @@ delta_a <- sigest/sqrt(sum_xxbar2) # estimate of the uncertainty of the slope
 
 delta_bbar <- sum(sigest/sqrt(n)) # estimate of the uncertainty in the fit at x = xbar
 
+#### error curves for the plot ####
 
+error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwcal_errors$d18Odw), by = 1)) %>%
+  mutate(y = a*(x - xbar) + ybar, 
+         dyfit = sigest * sqrt(1/n + (x - xbar)^2/sum_xxbar2), 
+         dytot = sigest * sqrt(1 + 1/n + (x - xbar)^2/sum_xxbar2))
 
 
 
