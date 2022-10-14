@@ -22,12 +22,19 @@ ggplot(dwcal, aes(x = d18Odw, y = d18Ophos))+
 
 #### calculate first interim terms for OSL fit uncertainty ####
 
-dwcal %>%
+dwcal_errors <- dwcal %>%
   mutate(xxbar = d18Odw - mean(dwcal$d18Odw),
          xxbar_sqr = (d18Odw - mean(dwcal$d18Odw))^2, 
          yybar = d18Ophos - mean(dwcal$d18Ophos),
          yybar_sqr = yybar^2, 
-         yybar_by_xxbar = yybar*xxbar, 
-         yaxb_sqr)
-  
+         yybar_by_xxbar = yybar*xxbar)
+
+
+
+
+
+
+
+
+
 
