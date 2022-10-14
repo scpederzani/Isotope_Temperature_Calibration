@@ -94,12 +94,22 @@ d18Odw_est_individual <- z1_input %>%
 
 # calculate mean d18Odw estimate (grouped by layer)
 
-z1_input %>%
+d18Odw_est_group <- z1_input %>%
   add_count(layer, name = "m") %>%
   group_by(site, taxon, layer, m) %>%
-  summarise(mean_d18Ophos = mean(d18Ophos, na.rm = TRUE)) %>%
+  summarise(mean_d18Ophos = round(mean(d18Ophos, na.rm = TRUE), 1)) %>%
   mutate(est_d18Odw_group = round(xbar + (mean_d18Ophos - ybar)/a, 1), 
-         est_d18Odw_group_error = (sigest/a)*sqrt(1/m + 1/n + (mean_d18Ophos - ybar)^2/a^2/sum_xxbar2))
+         est_d18Odw_group_error = round((sigest/a)*sqrt(1/m + 1/n + (mean_d18Ophos - ybar)^2/a^2/sum_xxbar2), 2))
+
+
+#### export calibrated data ####
+
+write.csv(d18Odw_est_individual, file = "04_estimate_d18Odw/output/individual_d18Odw_estimates.csv", row.names = FALSE)
+
+write.csv(d18Odw_est_group, file = "04_estimate_d18Odw/output/layer_d18Odw_estimates.csv", row.names = FALSE)
+
+
+
 
 
 
