@@ -20,7 +20,7 @@ ggplot(dwcal, aes(x = d18Odw, y = d18Ophos))+
   xlim(-20, 5)+
   ylim(0, 30)
 
-#### calculate first interim terms for OSL fit uncertainty ####
+#### calculate first interim terms for OLS fit uncertainty ####
 
 dwcal_errors <- dwcal %>%
   mutate(xxbar = d18Odw - mean(dwcal$d18Odw),
@@ -30,6 +30,13 @@ dwcal_errors <- dwcal %>%
          yybar_by_xxbar = yybar*xxbar)
 
 
+#### calculated variables ####
+
+n <- length(dwcal$d18Ophos) # number of calibration data points
+
+a <- sum(dwcal_errors$yybar_by_xxbar)/sum(dwcal_errors$xxbar_sqr) # OLS slope
+
+b <- mean(dwcal_errors$d18Ophos) - (a * mean(dwcal_errors$d18Odw)) # OLS intercept
 
 
 
