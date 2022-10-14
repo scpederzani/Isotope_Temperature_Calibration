@@ -24,9 +24,9 @@ ggplot(dwcal, aes(x = d18Odw, y = d18Ophos))+
 
 dwcal_errors <- dwcal %>%
   mutate(xxbar = d18Odw - mean(dwcal$d18Odw),
-         xxbar_sqr = (d18Odw - mean(dwcal$d18Odw))^2, 
+         xxbar2 = (d18Odw - mean(dwcal$d18Odw))^2, 
          yybar = d18Ophos - mean(dwcal$d18Ophos),
-         yybar_sqr = yybar^2, 
+         yybar2 = yybar^2, 
          yybar_by_xxbar = yybar*xxbar)
 
 
@@ -42,7 +42,7 @@ ybar <- mean(dwcal_errors$d18Ophos) # mean of d18Ophos (y)
 
 b <- ybar - (a * xbar) # OLS intercept
 
-r_sqr <- sum(dwcal_errors$yybar_by_xxbar)^2/sum(dwcal_errors$xxbar_sqr)/sum(dwcal_errors$yybar_sqr) 
+r2 <- sum(dwcal_errors$yybar_by_xxbar)^2/sum(dwcal_errors$xxbar2)/sum(dwcal_errors$yybar2) 
 
 
 
