@@ -3,8 +3,8 @@
 # equivalent to the Z1 step in Pryor et al. 2014
 
 #### load libraries ####
-library(ggplot2)
-library(dplyr)
+# library(ggplot2)
+# library(dplyr)
 
 # read the d18Odw-d18Ophos calibration data
 
@@ -14,16 +14,16 @@ head(dwcal)
 
 #### initial plot ####
 
-ggplot(dwcal, aes(x = d18Odw, y = d18Ophos))+
-  theme_bw()+
-  geom_point(size = 3)+
-  xlim(-20, 5)+
-  ylim(0, 30)
+ggplot2::ggplot(dwcal, ggplot2::aes(x = d18Odw, y = d18Ophos))+
+  ggplot2::theme_bw()+
+  ggplot2::geom_point(size = 3)+
+  ggplot2::xlim(-20, 5)+
+  ggplot2::ylim(0, 30)
 
 #### calculate first interim terms for OLS fit uncertainty ####
 
-dwcal_errors <- dwcal %>%
-  mutate(xxbar = d18Odw - mean(dwcal$d18Odw),
+dwcal_errors <- dwcal |>
+  dplyr::mutate(xxbar = d18Odw - mean(dwcal$d18Odw),
          xxbar2 = (d18Odw - mean(dwcal$d18Odw))^2, 
          yybar = d18Ophos - mean(dwcal$d18Ophos),
          yybar2 = yybar^2, 
@@ -48,8 +48,8 @@ sum_xxbar2 <- sum(dwcal_errors$xxbar2)
 
 #### more interim terms for OLS fit ####
 
-dwcal_errors <- dwcal_errors %>%
-  mutate(yaxb2 = (d18Ophos - (a * d18Odw) - b)^2)
+dwcal_errors <- dwcal_errors |>
+  dplyr::mutate(yaxb2 = (d18Ophos - (a * d18Odw) - b)^2)
 
 #### calculate error terms ####
 
@@ -61,8 +61,8 @@ delta_bbar <- sum(sigest/sqrt(n)) # estimate of the uncertainty in the fit at x 
 
 #### error curves for the plot ####
 
-error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwcal_errors$d18Odw), by = 1)) %>%
-  mutate(y = a*(x - xbar) + ybar, 
+error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwcal_errors$d18Odw), by = 1)) |>
+  dplyr::mutate(y = a*(x - xbar) + ybar, 
          dyfit = sigest * sqrt(1/n + (x - xbar)^2/sum_xxbar2), # 1 s.d. uncertainty on the OLS fit
          dytot = sigest * sqrt(1 + 1/n + (x - xbar)^2/sum_xxbar2)) # estimation uncertainty of d18Odw from d18Ophos
 
@@ -70,14 +70,14 @@ error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwc
 
 #### plot with error curves ####
 
-ggplot()+
-  theme_bw()+
-  geom_ribbon(data = error_curves, aes(x = x, ymin = y - dytot, ymax = y + dytot), color = NA, fill = "red", alpha = 0.3)+
-  geom_ribbon(data = error_curves, aes(x = x, ymin = y - dyfit, ymax = y + dyfit), color = NA, fill = "magenta", alpha = 0.3)+
-  geom_line(data = dwcal, aes(x = d18Odw, y = a * d18Odw + b), color = "black", lwd = 1)+
-  geom_point(data = dwcal, aes(x = d18Odw, y = d18Ophos), size = 3)+
-  xlim(-20, 5)+
-  ylim(0, 30)
+ggplot2::ggplot()+
+  ggplot2::theme_bw()+
+  ggplot2::geom_ribbon(data = error_curves, aes(x = x, ymin = y - dytot, ymax = y + dytot), color = NA, fill = "red", alpha = 0.3)+
+  ggplot2::geom_ribbon(data = error_curves, aes(x = x, ymin = y - dyfit, ymax = y + dyfit), color = NA, fill = "magenta", alpha = 0.3)+
+  ggplot2::geom_line(data = dwcal, aes(x = d18Odw, y = a * d18Odw + b), color = "black", lwd = 1)+
+  ggplot2::geom_point(data = dwcal, aes(x = d18Odw, y = d18Ophos), size = 3)+
+  ggplot2::xlim(-20, 5)+
+  ggplot2::ylim(0, 30)
 
 #### calibrate example data ####
 
@@ -88,17 +88,17 @@ z1_input
 
 # calibrate each d18Ophos point individually
 
-d18Odw_est_individual <- z1_input %>%
-  mutate(est_d18Odw_i = round(xbar + (d18Ophos - ybar)/a, 1), 
+d18Odw_est_individual <- z1_input |>
+  dplyr::mutate(est_d18Odw_i = round(xbar + (d18Ophos - ybar)/a, 1), 
          est_d18O_error_i = round((sigest/a)*sqrt(1 + 1/n + (d18Ophos - ybar)^2/sum_xxbar2), 1))
 
 # calculate mean d18Odw estimate (grouped by layer)
 
-d18Odw_est_group <- z1_input %>%
-  add_count(layer, name = "m") %>%
-  group_by(site, taxon, layer, m) %>%
-  summarise(mean_d18Ophos = round(mean(d18Ophos, na.rm = TRUE), 1)) %>%
-  mutate(est_d18Odw_group = round(xbar + (mean_d18Ophos - ybar)/a, 1), 
+d18Odw_est_group <- z1_input |>
+  dplyr::add_count(layer, name = "m") |>
+  dplyr::group_by(site, taxon, layer, m) |>
+  dplyr::summarise(mean_d18Ophos = round(mean(d18Ophos, na.rm = TRUE), 1)) |>
+  dplyr::mutate(est_d18Odw_group = round(xbar + (mean_d18Ophos - ybar)/a, 1), 
          est_d18Odw_group_error = round((sigest/a)*sqrt(1/m + 1/n + (mean_d18Ophos - ybar)^2/a^2/sum_xxbar2), 2))
 
 
