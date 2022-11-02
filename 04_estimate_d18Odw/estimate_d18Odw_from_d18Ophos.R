@@ -70,7 +70,7 @@ error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwc
 
 #### plot with error curves ####
 
-ggplot2::ggplot()+
+cal_uncertainty_plot <- ggplot2::ggplot()+
   ggplot2::theme_bw()+
   ggplot2::geom_ribbon(data = error_curves, ggplot2::aes(x = x, ymin = y - dytot, ymax = y + dytot), color = NA, fill = "red", alpha = 0.3)+
   ggplot2::geom_ribbon(data = error_curves, ggplot2::aes(x = x, ymin = y - dyfit, ymax = y + dyfit), color = NA, fill = "magenta", alpha = 0.3)+
@@ -78,6 +78,10 @@ ggplot2::ggplot()+
   ggplot2::geom_point(data = dwcal, ggplot2::aes(x = d18Odw, y = d18Ophos), size = 3)+
   ggplot2::xlim(-20, 5)+
   ggplot2::ylim(0, 30)
+
+cal_uncertainty_plot
+
+red
 
 #### calibrate example data ####
 
@@ -100,6 +104,18 @@ d18Odw_est_group <- z1_input |>
   dplyr::summarise(mean_d18Ophos = round(mean(d18Ophos, na.rm = TRUE), 1)) |>
   dplyr::mutate(est_d18Odw_group = round(xbar + (mean_d18Ophos - ybar)/a, 1), 
          est_d18Odw_group_error = round((sigest/a)*sqrt(1/m + 1/n + (mean_d18Ophos - ybar)^2/a^2/sum_xxbar2), 2))
+
+# visualize the calibration outcome
+
+library(ggplot2)
+
+cal_uncertainty_plot +
+  geom_point(data = d18Odw_est_group, aes(y = mean_d18Ophos, x = -20), color = "#39ACB8", size = 3)+
+  geom_linerange(data = d18Odw_est_group, aes(x = -20, ymin = mean_d18Ophos - 0.6, ymax = mean_d18Ophos + 0.6), color = "#39ACB8")+
+  geom_linerange(data = d18Odw_est_group, aes(y = mean_d18Ophos, xmin = -20, xmax = est_d18Odw_group), color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
+  geom_linerange(data = d18Odw_est_group, aes(x = est_d18Odw_group, ymin = 0, ymax = mean_d18Ophos), color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
+  NULL
+
 
 
 #### export calibrated data ####
