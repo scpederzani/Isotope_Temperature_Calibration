@@ -72,10 +72,10 @@ error_curves <- data.frame(x = seq(from = min(dwcal_errors$d18Odw), to = max(dwc
 
 ggplot2::ggplot()+
   ggplot2::theme_bw()+
-  ggplot2::geom_ribbon(data = error_curves, aes(x = x, ymin = y - dytot, ymax = y + dytot), color = NA, fill = "red", alpha = 0.3)+
-  ggplot2::geom_ribbon(data = error_curves, aes(x = x, ymin = y - dyfit, ymax = y + dyfit), color = NA, fill = "magenta", alpha = 0.3)+
-  ggplot2::geom_line(data = dwcal, aes(x = d18Odw, y = a * d18Odw + b), color = "black", lwd = 1)+
-  ggplot2::geom_point(data = dwcal, aes(x = d18Odw, y = d18Ophos), size = 3)+
+  ggplot2::geom_ribbon(data = error_curves, ggplot2::aes(x = x, ymin = y - dytot, ymax = y + dytot), color = NA, fill = "red", alpha = 0.3)+
+  ggplot2::geom_ribbon(data = error_curves, ggplot2::aes(x = x, ymin = y - dyfit, ymax = y + dyfit), color = NA, fill = "magenta", alpha = 0.3)+
+  ggplot2::geom_line(data = dwcal, ggplot2::aes(x = d18Odw, y = a * d18Odw + b), color = "black", lwd = 1)+
+  ggplot2::geom_point(data = dwcal, ggplot2::aes(x = d18Odw, y = d18Ophos), size = 3)+
   ggplot2::xlim(-20, 5)+
   ggplot2::ylim(0, 30)
 
