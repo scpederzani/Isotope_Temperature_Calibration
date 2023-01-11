@@ -59,6 +59,30 @@ delta_a <- sigest/sqrt(sum_ttbar2) # estimate of the uncertainty of the slope
 
 delta_bbar <- sum(sigest/sqrt(nt)) # estimate of the uncertainty in the fit at t = tbar
 
+#### error curves for the plot ####
+
+error_curves <- data.frame(t = seq(from = min(tcal_errors$Tair), 
+                                   to = max(tcal_errors$Tair), by = 0.1)) |>
+  dplyr::mutate(x = at*(t - tbar) + xbar, # note wrong notation in excel sheet cell
+                dxfit = sigest * sqrt(1/nt + (t - tbar)^2/sum_ttbar2), # 1 s.d. uncertainty on the OLS fit
+                dxtot = sigest * sqrt(1 + 1/nt + (t - tbar)^2/sum_ttbar2)) # estimation uncertainty of d18Odw from d18Ophos
+# note incorrect notation but correct calculation of formulas in the x, dxfit and dxtot excel cells
+
+#### plot with error curves ####
+
+cal_uncertainty_plot <- ggplot2::ggplot()+
+  ggplot2::theme_bw()+
+  ggplot2::geom_ribbon(data = error_curves, ggplot2::aes(x = t, ymin = x - dxtot, ymax = x + dxtot), 
+                       color = NA, fill = "red", alpha = 0.3)+
+  ggplot2::geom_ribbon(data = error_curves, ggplot2::aes(x = t, ymin = x - dxfit, ymax = x + dxfit), 
+                       color = NA, fill = "magenta", alpha = 0.3)+
+  ggplot2::geom_line(data = tcal, ggplot2::aes(x = Tair, y = at * Tair + bt),
+                     color = "black", lwd = 1)+
+  ggplot2::geom_point(data = tcal, ggplot2::aes(x = Tair, y = d18Oprecip), size = 3)+
+  ggplot2::xlim(5, 15)+
+  ggplot2::ylim(-12, -5)
+
+cal_uncertainty_plot
 
 
 
