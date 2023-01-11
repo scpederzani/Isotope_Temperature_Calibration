@@ -81,8 +81,6 @@ cal_uncertainty_plot <- ggplot2::ggplot()+
 
 cal_uncertainty_plot
 
-red
-
 #### calibrate example data ####
 
 
@@ -115,8 +113,6 @@ cal_uncertainty_plot +
   geom_linerange(data = d18Odw_est_group, aes(y = mean_d18Ophos, xmin = -20, xmax = est_d18Odw_group), color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
   geom_linerange(data = d18Odw_est_group, aes(x = est_d18Odw_group, ymin = 0, ymax = mean_d18Ophos), color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
   NULL
-
-
 
 #### export calibrated data ####
 
