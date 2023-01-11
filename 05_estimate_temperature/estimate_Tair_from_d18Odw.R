@@ -45,6 +45,16 @@ r2 <- sum(tcal_errors$xxbar_by_ttbar)^2/sum(tcal_errors$ttbar2)/sum(tcal_errors$
 
 sum_ttbar2 <- sum(tcal_errors$ttbar2)
 
+#### more interim terms for OLS fit ####
+
+tcal_errors <- tcal_errors |>
+  dplyr::mutate(xatb2 = (d18Oprecip - (at * Tair) - bt)^2) 
+# calculated as (d18Oprecip - (at * ttbar) - xbar)^2 in spreadsheet, but gives the same result
+
+
+
+
+
 
 
 
