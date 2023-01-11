@@ -51,6 +51,13 @@ tcal_errors <- tcal_errors |>
   dplyr::mutate(xatb2 = (d18Oprecip - (at * Tair) - bt)^2) 
 # calculated as (d18Oprecip - (at * ttbar) - xbar)^2 in spreadsheet, but gives the same result
 
+#### calculate error terms ####
+
+sigest <- sqrt(sum(tcal_errors$xatb2)/(nt - 2)) # estimate of the standard deviation of the natural variability in ε
+
+delta_a <- sigest/sqrt(sum_ttbar2) # estimate of the uncertainty of the slope
+
+delta_bbar <- sum(sigest/sqrt(nt)) # estimate of the uncertainty in the fit at t = tbar
 
 
 
