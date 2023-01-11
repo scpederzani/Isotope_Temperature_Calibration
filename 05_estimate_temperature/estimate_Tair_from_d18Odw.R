@@ -85,6 +85,25 @@ cal_uncertainty_plot <- ggplot2::ggplot()+
 cal_uncertainty_plot
 
 
+#### calibrate example data (output of Z1 as input) ####
+
+z2_input <- read.csv("04_estimate_d18Odw/output/layer_d18Odw_estimates.csv")
+
+z2_input
+
+# calculate layer Tair estimate from layer d18Odw estimate
+
+tair_est_group <- z2_input |>
+  dplyr::mutate(est_Tair_group = round(tbar + (est_d18Odw_group - xbar)/at, 1), 
+                est_Tair_group_error = round((1/at)*sqrt(est_d18Odw_group_error^2 + 
+                                                           (sigest^2/nt) + 
+                                                           (sigest*(est_d18Odw_group-xbar)^2/
+                                                              (at^2 * sum_ttbar2))), 2))
+
+
+tair_est_group
+
+
 
 
 
