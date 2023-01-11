@@ -29,7 +29,21 @@ tcal_errors <- tcal |>
                 xxbar_by_ttbar = xxbar*ttbar) # because it means x is now on the y-axis here
 
 
+#### computed variables ####
 
+nt <- length(tcal$d18Oprecip) # number of calibration data points
+
+at <- sum(tcal_errors$xxbar_by_ttbar)/sum(tcal_errors$ttbar2) # OLS slope
+
+tbar <- mean(tcal_errors$Tair) # mean of Tair
+
+xbar <- mean(tcal_errors$d18Oprecip) # mean of d18Oprecip
+
+bt <- xbar - (at * tbar) # OLS intercept
+
+r2 <- sum(tcal_errors$xxbar_by_ttbar)^2/sum(tcal_errors$ttbar2)/sum(tcal_errors$xxbar2) 
+
+sum_ttbar2 <- sum(tcal_errors$ttbar2)
 
 
 
