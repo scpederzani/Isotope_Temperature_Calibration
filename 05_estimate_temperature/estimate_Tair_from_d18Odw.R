@@ -119,5 +119,7 @@ cal_uncertainty_plot +
                  color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
   NULL
 
+#### export calibrated data ####
 
+write.csv(tair_est_group, file = "05_estimate_temperature/output/layer_Tair_estimates.csv", row.names = FALSE)
 
