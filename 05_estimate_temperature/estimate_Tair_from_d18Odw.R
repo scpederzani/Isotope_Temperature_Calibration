@@ -104,7 +104,20 @@ tair_est_group <- z2_input |>
 tair_est_group
 
 
+# visualize the calibration outcome
 
+library(ggplot2)
+
+cal_uncertainty_plot +
+  geom_point(data = tair_est_group, aes(y = est_d18Odw_group, x = 5), color = "#39ACB8", size = 3)+
+  geom_linerange(data = tair_est_group, aes(x = 5, ymin = est_d18Odw_group - est_d18Odw_group_error, 
+                                            ymax = est_d18Odw_group + est_d18Odw_group_error), 
+                 color = "#39ACB8")+
+  geom_linerange(data = tair_est_group, aes(y = est_d18Odw_group, xmin = 5, xmax = est_Tair_group), 
+                 color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
+  geom_linerange(data = tair_est_group, aes(x = est_Tair_group, ymin = -12, ymax = est_d18Odw_group), 
+                 color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
+  NULL
 
 
 
