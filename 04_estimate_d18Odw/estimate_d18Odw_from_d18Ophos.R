@@ -50,6 +50,7 @@ sum_xxbar2 <- sum(dwcal_errors$xxbar2)
 
 dwcal_errors <- dwcal_errors |>
   dplyr::mutate(yaxb2 = (d18Ophos - (a * d18Odw) - b)^2)
+# calculated as (d18Ophos - (at * xxbar) - ybar)^2 in spreadsheet, but gives the same result
 
 #### calculate error terms ####
 
@@ -83,7 +84,6 @@ cal_uncertainty_plot
 
 #### calibrate example data ####
 
-
 z1_input <- read.csv("03_input_to_calibrate/equus_example_d18O_input.csv")
 
 z1_input
@@ -113,6 +113,8 @@ cal_uncertainty_plot +
   geom_linerange(data = d18Odw_est_group, aes(y = mean_d18Ophos, xmin = -20, xmax = est_d18Odw_group), color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
   geom_linerange(data = d18Odw_est_group, aes(x = est_d18Odw_group, ymin = 0, ymax = mean_d18Ophos), color = "#39ACB8", lwd = 1.5, alpha = 0.6)+
   NULL
+
+
 
 #### export calibrated data ####
 
